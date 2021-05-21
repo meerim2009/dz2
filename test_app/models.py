@@ -16,6 +16,7 @@ class Product(models.Model):
     price = models.IntegerField()
     category = models.ForeignKey(Category,
                                  on_delete=models.CASCADE)
+    col = ""
 
 
     def __str__(self):

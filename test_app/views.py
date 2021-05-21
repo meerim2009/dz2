@@ -1,18 +1,52 @@
 from urllib import request
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 
-from test_app.models import Category, Product
+from test_app.models import Category, Product, Review
+from forms import *
 
 
-def get_all_posts():
-    category = Category.objects.all()
+def get_all_posts(request):
     product = Product.objects.all()
+
     data = {
-        'category': category,
-        'product': product,
+        'products': product,
     }
 
+    for i in range(len(data['products'])):
+        col = Review.objects.filter(product_id=data['products'][i].id)
+        data['products'][i].col = col.count()
+
     return render(request, 'index.html', context=data)
+
+
+def get_one_product(request, id):
+    product = Product.objects.get(id=id)
+    review = Review.objects.filter(product_id=id)
+
+    data = {
+        'product': product,
+        'review': review,
+    }
+
+    return render(request, 'add1.html', context=data)
+
+
+def add_category(request):
+
+    if request.method == "POST":
+        categoryForm = CourseForm(data=request.POST)
+
+        if categoryForm.is_valid():
+            categoryForm.save()
+            return redirect('/posts/')
+        else:
+            return render(request, 'add.html', context={'forms': categoryForm})
+
+    data = {
+     'forms': CourseForm
+    }
+
+    return render(request, 'add.html', context=data)

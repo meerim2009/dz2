@@ -16,6 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from test_app import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('posts/', views.get_all_posts),
+    path('posts/<int:id>/', views.get_one_product),
+    path('add_category/', views.add_category)
 ]
+
+

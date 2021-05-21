@@ -6,5 +6,12 @@
 </head>
 <body>
 <h1>jalsdkfj</h1>
+{% for product in products %}
+    <a href="/posts/{{ product.id }}">{{ product }}</a>
+    <p>Количество отзывов: {{ product.col }}</p>
+    <br>
+{% endfor %}
+
+
 </body>
 </html>
