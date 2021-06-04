@@ -1,5 +1,6 @@
 from urllib import request
 
+from django.contrib import auth
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -50,3 +51,54 @@ def add_category(request):
     }
 
     return render(request, 'add.html', context=data)
+
+
+def main_page(request):
+    data = {
+        'username': auth.get_user(request).username
+    }
+    return render(request, 'main.html', context=data)
+
+
+
+def register(request):
+    if request.method=='POST':
+        form = UserCreationForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            print('POST запрос без ошибок')
+            return redirect('/admin/')
+        else:
+            print('POST запрос с ошибкой')
+            return render(request, 'register.html', context={'form': form})
+    data = {
+        'form': UserCreationForm(),
+        'username': auth.get_user(request).username
+    }
+    print('GET запрос ')
+    return render(request, 'register.html', context=data)
+
+
+def login(request):
+    if request.method == 'POST':
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            user = auth.authenticate(
+            username = form.cleaned_data['username'],
+            password = form.cleaned_data['password']
+            )
+            if user is not None:
+                auth.login(request, user)
+                return redirect('/')
+            else:
+                return render(request, 'login.html', context={'form': form})
+    data = {
+        'form': LoginForm(),
+        'username': auth.get_user(request).username
+    }
+    return render(request, 'login.html', context=data)
+
+
+def logout(request):
+    auth.logout(request)
+    return redirect('/')

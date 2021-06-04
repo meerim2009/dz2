@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Магазин товаров</title>
-</head>
-<body>
-<h1>jalsdkfj</h1>
+{% extends 'layout.html' %}
 {% for product in products %}
     <a href="/posts/{{ product.id }}">{{ product }}</a>
     <p>Количество отзывов: {{ product.col }}</p>
@@ -13,5 +6,28 @@
 {% endfor %}
 
 
-</body>
-</html>
+
+
+{% block content %}
+    <h1 style="color: blueviolet">Все курсы</h1>
+    <hr>
+    {% for i in all_courses %}
+        <a href="/courses{{ i.id }}/"></a>
+    <p>{{ i.id }}: {{ i.name }}</p>
+        </a>
+    {% endfor %}
+    <nav aria-label="Page navigation example">
+  <ul class="pagination">
+      {% for button in buttons %}
+        <li class="page-item"><a class="page-link"
+                             href="/courses/?page={{ button }}">{{ button }}</a>
+    </li>
+      {% endfor %}
+  </ul>
+</nav>
+{% endblock %}
+
+
+
+
+
